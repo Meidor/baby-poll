@@ -16,7 +16,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           dockerfile: ./babypoll/Dockerfile
-          workdir: ./babypoll
       - name: Publish Docker Babypoll-backend
         uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
@@ -25,4 +24,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: docker.pkg.github.com
           dockerfile: ./backend/Dockerfile
-          workdir: ./backend

@@ -76,6 +76,8 @@ export default class Home extends Vue {
   get isValid() {
     return (
       this.guess !== null &&
+      this.poll !== null &&
+      this.participant !== null &&
       !this.isNullOrWhitespace(this.participant) &&
       this.poll.entries.filter(
         e =>
@@ -89,8 +91,10 @@ export default class Home extends Vue {
     return this.isValid && !this.submitting;
   }
 
-  sameDate(a: Date, b: Date): boolean {
+  sameDate(a: Date | null, b: Date | null): boolean {
     return (
+      a !== null &&
+      b !== null &&
       a.getFullYear() === b.getFullYear() &&
       a.getMonth() === b.getMonth() &&
       a.getDate() === b.getDate()
@@ -123,14 +127,18 @@ export default class Home extends Vue {
     return "";
   }
 
-  get highlightedDates(): { dates: Date[]; includeDisabled: boolean } {
+  get highlightedDates():
+    | { dates: Date[]; includeDisabled: boolean }
+    | undefined {
+    if (this.poll == null) return undefined;
     return {
       dates: [new Date(this.poll.dueDate)],
       includeDisabled: true
     };
   }
 
-  get disabledDates(): { dates: Date[] } {
+  get disabledDates(): { dates: Date[] } | undefined {
+    if (this.poll == null) return undefined;
     return {
       dates: this.poll.entries.map(e => new Date(e.guess))
     };
@@ -150,8 +158,9 @@ export default class Home extends Vue {
   async submit() {
     this.submitting = true;
     try {
-      console.log(this.guess.toUTCString());
-      console.log(this.guess.toISOString());
+      if (!this.participant || !this.guess || !this.poll) {
+        return;
+      }
       let entry: IEntry = {
         pollId: this.poll.pollId,
         participant: this.participant,

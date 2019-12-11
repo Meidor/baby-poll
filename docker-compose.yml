@@ -1,8 +1,10 @@
 version: "3.7"
 services:
   frontend:
+    image: quay.io/rikharink/babypoll
     build:
       context: ./babypoll/
+      dockerfile: Dockerfile
       args:
         api_base_url: https://${DOMAIN?Variable DOMAIN not set}
     networks:
@@ -26,6 +28,7 @@ services:
         # Traefik service that listens to HTTPS
         - traefik.webservice.frontend.entryPoints=https
   backend:
+    image: quay.io/rikharink/babypoll-backend
     build: ./backend/
     networks:
       - default

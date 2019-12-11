@@ -2,8 +2,8 @@ version: "3.7"
 services:
   frontend:
     build:
-      context: .
-      dockerfile: DockerfileBabypoll
+      context: ./babypoll
+      dockerfile: Dockerfile
       args:
         api_base_url: https://${DOMAIN?Variable DOMAIN not set}
     networks:
@@ -15,8 +15,8 @@ services:
         max-file: "10"
   backend:
     build:
-      context: .
-      dockerfile: DockerfileBabypollBackend
+      context: ./backend
+      dockerfile: Dockerfile
     networks:
       - default
     volumes:

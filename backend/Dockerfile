@@ -5,9 +5,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["./babypoll.csproj", ""]
+COPY ["./backend/babypoll.csproj", ""]
 RUN dotnet restore "./babypoll.csproj"
-COPY . .
+COPY ./backend .
 RUN dotnet build "babypoll.csproj" -c Release -o /app/build
 
 FROM build AS publish

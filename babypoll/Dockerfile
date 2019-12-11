@@ -3,9 +3,9 @@ FROM node:lts-alpine as build-stage
 WORKDIR /app
 ARG api_base_url=https://poll.har.ink
 ENV VUE_APP_API_URL=$api_base_url
-COPY ./package*.json ./
+COPY ./babypoll/package*.json ./
 RUN npm install
-COPY . .
+COPY ./babypoll .
 RUN npm run build
 
 # production stage

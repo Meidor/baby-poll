@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+  frontend:
+    build:
+      context: ./babypoll/
+      args:
+        api_base_url: https://${DOMAIN?Variable DOMAIN not set}
+    networks:
+      - default
+      - traefik-public
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:${DOMAIN?Variable DOMAIN not set}
+        - traefik.enable=true
+        - traefik.port=80
+        - traefik.tags=traefik-public
+        - traefik.docker.network=traefik-public
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
+  backend:
+    build: ./backend/
+    networks:
+      - default
+      - traefik-public
+    volumes:
+      - dbvolume:/app/db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:${DOMAIN?Variable DOMAIN not set};PathPrefix:/api
+        - traefik.enable=true
+        - traefik.port=80
+        - traefik.tags=traefik-public
+        - traefik.docker.network=traefik-public
+        # Traefik service that listens to HTTP
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        # Traefik service that listens to HTTPS
+        - traefik.webservice.frontend.entryPoints=https
+networks:
+  default:
+  traefik-public:
+    external: true
+volumes:
+  dbvolume:

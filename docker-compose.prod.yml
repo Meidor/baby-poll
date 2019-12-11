@@ -2,11 +2,6 @@ version: "3.7"
 services:
   frontend:
     image: quay.io/rikharink/babypoll
-    build:
-      context: ./babypoll/
-      dockerfile: Dockerfile
-      args:
-        api_base_url: https://${DOMAIN?Variable DOMAIN not set}
     networks:
       - default
       - traefik-public

@@ -1,6 +1,6 @@
 # build stage
 FROM node:lts-alpine as build-stage
-ARG api_base_url
+ARG api_base_url=https://poll.har.ink
 ENV VUE_APP_API_URL=$api_base_url
 COPY package*.json ./
 RUN npm install

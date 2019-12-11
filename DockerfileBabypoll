@@ -1,5 +1,6 @@
 # build stage
 FROM node:lts-alpine as build-stage
+WORKDIR /app
 ARG api_base_url=https://poll.har.ink
 ENV VUE_APP_API_URL=$api_base_url
 COPY ./babypoll/package*.json ./

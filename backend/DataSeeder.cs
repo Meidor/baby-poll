@@ -9,11 +9,7 @@ namespace BabyPoll
         public static void SeedData(this IApplicationBuilder app)
         {
             var context = app.ApplicationServices.GetService<BabyPollContext>();
-
-            if (!context.Database.EnsureCreated())
-            {
-                context.Database.Migrate();
-            }
+            context.Database.Migrate();
         }
     }
 }

@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="entry in poll.entries" v-bind:key="entry.entryId">
+          <tr v-for="entry in entries" v-bind:key="entry.entryId">
             <td>{{ entry.participant }}</td>
             <td>{{ formatDate(entry.guess) }}</td>
           </tr>
@@ -73,6 +73,12 @@ export default class Home extends Vue {
   submitting: boolean = false;
   format: string = "yyyy-MM-dd";
 
+  get entries(): IEntry[] {
+    if (!this.poll) {
+      return [];
+    }
+    return this.poll.entries.sort((a, b) => a.guess.localeCompare(b.guess));
+  }
   get isValid() {
     return (
       this.guess !== null &&

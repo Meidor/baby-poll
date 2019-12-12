@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   frontend:
-    image: quay.io/rikharink/babypoll
+    image: docker.pkg.github.com/meidor/babypoll/frontend:latest
     networks:
       - default
       - traefik-public
@@ -12,7 +12,7 @@ services:
         max-file: "10"
     deploy:
       labels:
-        - traefik.frontend.rule=Host:${DOMAIN?Variable DOMAIN not set}
+        - traefik.frontend.rule=Host:poll.har.ink,poll.ditzel.dev
         - traefik.enable=true
         - traefik.port=80
         - traefik.tags=traefik-public
@@ -23,8 +23,7 @@ services:
         # Traefik service that listens to HTTPS
         - traefik.webservice.frontend.entryPoints=https
   backend:
-    image: quay.io/rikharink/babypoll-backend
-    build: ./backend/
+    image: docker.pkg.github.com/meidor/babypoll/backend:latest
     networks:
       - default
       - traefik-public
@@ -37,7 +36,7 @@ services:
         max-file: "10"
     deploy:
       labels:
-        - traefik.frontend.rule=Host:${DOMAIN?Variable DOMAIN not set};PathPrefix:/api
+        - traefik.frontend.rule=Host:poll.har.ink;PathPrefix:/api
         - traefik.enable=true
         - traefik.port=80
         - traefik.tags=traefik-public
